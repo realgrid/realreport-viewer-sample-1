@@ -1,0 +1,11 @@
+{
+  "name": "realreport-viewer-example",
+  "version": "1.0.0",
+  "description": "realreport viewer example private repository",
+  "main": "index.js",
+  "scripts": {
+    "start": "npx live-server ."
+  },
+  "author": "wooritech",
+  "license": "ISC"
+}

@@ -1,0 +1,15 @@
+{
+    "billTo": "Hanon Systems",
+    "address": "(Test-dong), 135, Woori-ro 55gil, Songpa-gu, Seoul",
+    "total": 1000000,
+    "invoiceNo": "123456789",
+    "createDate": "2024-04-30",
+    "pricingPeriod": "2024-04-01 ~ 2024-04-30",
+    "beneficiaryName": "SAMSUNG SDS CO. LDT.",
+    "bankdName": "WOORI BANK",
+    "accountNo": "123338-98-100018 (USD, JPY)",
+    "swiftCode": "CZNABCDE",
+    "koBeneficiaryName": "삼성에스디에스 (주)",
+    "koBankName": "우리은행",
+    "koAccountNo": "123338-98-100013 (KRW)"
+}

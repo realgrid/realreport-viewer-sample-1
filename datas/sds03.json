@@ -1,0 +1,17 @@
+[
+    {
+        "customerName": "Hanon Systems",
+        "hblNo": "TEST401238600DATA",
+        "detailService": "Ship(FCL)",
+        "pol": "KRPUS",
+        "pod": "USLAX",
+        "atd": "2024-04-15",
+        "ata": "2024-04-27",
+        "deliveryComplete": "2024-04-29",
+        "uldNo": "SKHU9524655",
+        "unitPrice": 0,
+        "pay": 150,
+        "currency": "KRW",
+        "tax": 0
+    }
+]

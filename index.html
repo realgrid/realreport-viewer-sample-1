@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="ko">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>RealReport Viewer Sample</title>
+        <style>
+            @font-face {
+                font-family: 'Pretendard';
+                src: url('fonts/Pretendard-Regular.otf') format('otf');
+                font-weight: normal;
+                font-style: normal;
+            }
+            @font-face {
+                font-family: 'Pretendard';
+                src: url('fonts/Pretendard-Bold.otf') format('woff');
+                font-weight: bold;
+                font-style: normal;
+            }
+            html,
+            body {
+                width: 100vw;
+                height: 100vh;
+                padding: 0;
+                margin: 0;
+            }
+
+            .menu-container {
+                display: flex;
+                flex-direction: column;
+                gap: 8px;
+                padding: 8px;
+                height: 30%;
+            }
+            .scroll-container {
+                position: relative;
+                display: flex;
+                overflow: auto;
+                width: calc(100% - 16px);
+                height: calc(70% - 32px);
+                box-sizing: border-box;
+                border: 1px solid black;
+                padding-top: 8px;
+                margin: 8px;
+            }
+            #realreport {
+                width: 100%;
+                height: 100%;
+            }
+        </style>
+        <link href="css/realreport.css" rel="stylesheet" />
+        <script src="lib/pdfkit.js"></script>
+
+        <!-- 리얼리포트 Viewer 라이브러리 -->
+        <script src="lib/realreport.js"></script>
+
+        <!-- 리얼리포트 Viewer 관련 코드 -->
+        <script src="app.js"></script>
+        <script>
+            // localhost, 127.0.0.1 도메인에서 사용가능한 라이센스 (만료일: 2025-01-04)
+            var realReportLic =
+                'upVcPE+wPOkcfqywe+clVN+UVTCvO3is+83EYTz6U/sTXJR8Yw8Y0WXyjOMqbrgvr3+iyFPC2UvKqt1f0nYq0AckeI/JjG/PWk7cM77qV3E=';
+
+            addEventListener('DOMContentLoaded', async () => {
+                initViewer('realreport');
+
+                const reportForm = await fetchReport('sample-1');
+
+                // ReportViewer 객체에 리포트 양식 설정
+                setReport(reportForm);
+
+                await selectData(false);
+
+                // 미리보기 API 실행
+                preview();
+            });
+
+            async function selectData(needPreview = true) {
+                // 체크한 데이터들만 리포트와 연결
+                const frtChecked = document.getElementById('frt').checked;
+                const sds01Checked = document.getElementById('sds01').checked;
+                const sds02Checked = document.getElementById('sds02').checked;
+                const sds03Checked = document.getElementById('sds03').checked;
+
+                const productList = [];
+
+                if (frtChecked) {
+                    productList.push(...(await fetchData('frt-data')));
+                }
+                if (sds01Checked) {
+                    productList.push(...(await fetchData('sds01')));
+                }
+                if (sds02Checked) {
+                    productList.push(...(await fetchData('sds02')));
+                }
+                if (sds03Checked) {
+                    productList.push(...(await fetchData('sds03')));
+                }
+
+                const invoiceData = await fetchData('invoice-info');
+
+                // 리포트 양식에서 사용하는 데이터 스키마 구조대로 구성
+                const reportData = {
+                    'invoice-info': {
+                        type: 'simple',
+                        values: invoiceData,
+                    },
+                    'product-list': {
+                        type: 'band',
+                        values: productList,
+                    },
+                };
+
+                setDataSet(reportData);
+
+                if (needPreview) {
+                    preview();
+                }
+            }
+
+            async function fetchReport(path) {
+                return fetch(`/reports/${path}.json`).then((result) => {
+                    return result.json();
+                });
+            }
+
+            async function fetchData(path) {
+                return fetch(`/datas/${path}.json`).then((result) => {
+                    return result.json();
+                });
+            }
+        </script>
+    </head>
+    <body>
+        <div class="menu-container">
+            <div>
+                <h1>Pricing No.</h1>
+                <input id="frt" type="checkbox" onchange="selectData()" checked /><label>FRT2024</label>
+
+                <h1>Order No.</h1>
+                <input id="sds01" type="checkbox" onchange="selectData()" /><label>SDSCR011</label>
+
+                <input id="sds02" type="checkbox" onchange="selectData()" /><label>SDSCR012</label>
+
+                <input id="sds03" type="checkbox" onchange="selectData()" /><label>SDSCR013</label>
+            </div>
+            <div>
+                <button onclick="print()">🖨️ print</button>
+                <button onclick="exportPdf()">pdf</button>
+                <button onclick="exportDocument('docx', 'sample-docx')">docx</button>
+                <button onclick="exportDocument('hwp', 'sample-hwp')">hwp</button>
+                <button onclick="exportImage('png', 'sample-image')">png</button>
+            </div>
+        </div>
+        <div class="scroll-container">
+            <div id="realreport"></div>
+        </div>
+    </body>
+</html>
